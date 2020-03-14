@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'airbnb',
+    'prettier',
   ],
   globals: {
     Atomics: 'readonly',
@@ -20,7 +21,11 @@ module.exports = {
   },
   plugins: [
     'react',
+    'prettier',
+    'simple-import-sort',
   ],
   rules: {
+    'prettier/prettier': 'error',
+    'simple-import-sort/sort': 'error',
   },
 };
