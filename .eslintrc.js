@@ -27,5 +27,6 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     'simple-import-sort/sort': 'error',
+    'import/prefer-default-export': 'off',
   },
 };
