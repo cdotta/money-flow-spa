@@ -1,8 +1,8 @@
-import { Box, Divider, IconButton, Tab, Tabs } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { Box, Tab, Tabs } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+
+import PaymentRow from './PaymentRow';
 
 const Headers = () => {
   return (
@@ -40,29 +40,9 @@ const PaymentsTable = ({ pendingPayments, paidPayments }) => {
         <Tab value="paid" label="Paid" />
       </Tabs>
       <Headers />
-      {payments.map(({ description, amount, id }) => {
-        return (
-          <Box key={id}>
-            <Box display="flex">
-              <Box flexGrow={1} padding={2}>
-                {description}
-              </Box>
-              <Box width={100} padding={2}>
-                {amount}
-              </Box>
-              <Box width={100}>
-                <IconButton aria-label="delete">
-                  <DeleteIcon />
-                </IconButton>
-                <IconButton aria-label="edit">
-                  <EditIcon />
-                </IconButton>
-              </Box>
-            </Box>
-            <Divider />
-          </Box>
-        );
-      })}
+      {payments.map(payment => (
+        <PaymentRow payment={payment} key={payment.id} />
+      ))}
     </Box>
   );
 };

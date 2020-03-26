@@ -1,6 +1,8 @@
 import { ApolloProvider } from '@apollo/react-hooks';
+import DateFnsUtils from '@date-io/date-fns';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
@@ -28,12 +30,14 @@ function Router() {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <CssBaseline />
-          <Router />
-        </Provider>
-      </ApolloProvider>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <ApolloProvider client={client}>
+          <Provider store={store}>
+            <CssBaseline />
+            <Router />
+          </Provider>
+        </ApolloProvider>
+      </MuiPickersUtilsProvider>
     </ThemeProvider>
   );
 }

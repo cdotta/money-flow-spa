@@ -1,26 +1,19 @@
 import { gql } from 'apollo-boost';
 
+import { PAYMENT_FIELDS } from './fragments';
+
 export const PAYMENTS = gql`
   query MonthlyPayments(
     $paidFilter: PaymentFilterInput
     $pendingFilter: PaymentFilterInput
   ) {
     paidPayments: payments(filter: $paidFilter) {
-      id
-      description
-      amount
-      pending
-      dueMonth
-      dueYear
+      ...PaymentFields
     }
 
     pendingPayments: payments(filter: $pendingFilter) {
-      id
-      description
-      amount
-      pending
-      dueMonth
-      dueYear
+      ...PaymentFields
     }
   }
+  ${PAYMENT_FIELDS}
 `;
