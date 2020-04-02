@@ -1,11 +1,15 @@
 import { useQuery } from '@apollo/react-hooks';
 import { getMonth, getYear, parseISO } from 'date-fns';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PaymentsTable from '../components/PaymentsTable';
 import Spinner from '../components/Spinner';
 import { PAYMENTS } from '../graphql/queries';
+import {
+  RESET_SELECTION,
+  TOGGLE_SELECTION,
+} from '../store/ducks/selectedPayments';
 
 function enrichPayments({ payments, currentYear, currentMonth }) {
   return payments.map(payment => ({
@@ -17,6 +21,8 @@ function enrichPayments({ payments, currentYear, currentMonth }) {
 
 const PaymentsTableContainer = () => {
   const currentDate = parseISO(useSelector(state => state.currentDate));
+  const selectedPayments = useSelector(state => state.selectedPayments);
+  const dispatch = useDispatch();
   const currentMonth = getMonth(currentDate) + 1;
   const currentYear = getYear(currentDate);
 
@@ -49,8 +55,19 @@ const PaymentsTableContainer = () => {
     return <div>{JSON.stringify(error)}</div>;
   }
 
+  const handleSelect = id => {
+    dispatch({ type: TOGGLE_SELECTION, payload: id });
+  };
+
+  const handleSelectedReset = () => {
+    dispatch({ type: RESET_SELECTION });
+  };
+
   return (
     <PaymentsTable
+      selectedPayments={selectedPayments}
+      onSelect={handleSelect}
+      onSelectedReset={handleSelectedReset}
       paidPayments={enrichPayments({
         payments: data.paidPayments,
         currentMonth,

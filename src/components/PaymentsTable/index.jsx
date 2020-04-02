@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs } from '@material-ui/core';
+import { Box, Button, Tab, Tabs } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
@@ -20,18 +20,28 @@ const Headers = () => {
   );
 };
 
-const PaymentsTable = ({ pendingPayments, paidPayments }) => {
+const PaymentsTable = ({
+  pendingPayments,
+  paidPayments,
+  selectedPayments,
+  onSelect,
+  onSelectedReset,
+}) => {
   const [activeTab, setActiveTab] = useState('pending');
-
   const isPendingSelected = activeTab === 'pending';
-
   const payments = isPendingSelected ? pendingPayments : paidPayments;
+  const arePaymentsSelected = Object.values(selectedPayments).some(Boolean);
+
+  const handleTabChange = value => {
+    onSelectedReset();
+    setActiveTab(value);
+  };
 
   return (
     <Box padding={1}>
       <Tabs
         value={activeTab}
-        onChange={(_, newValue) => setActiveTab(newValue)}
+        onChange={(_, value) => handleTabChange(value)}
         indicatorColor="primary"
         textColor="primary"
         variant="fullWidth"
@@ -39,9 +49,23 @@ const PaymentsTable = ({ pendingPayments, paidPayments }) => {
         <Tab value="pending" label="Pending" />
         <Tab value="paid" label="Paid" />
       </Tabs>
+      <Box display="flex" justifyContent="flex-end" marginTop={1}>
+        <Button
+          variant="contained"
+          color={isPendingSelected ? 'primary' : 'secondary'}
+          disabled={!arePaymentsSelected}
+        >
+          {isPendingSelected ? 'Pay' : 'Stash'}
+        </Button>
+      </Box>
       <Headers />
       {payments.map(payment => (
-        <PaymentRow payment={payment} key={payment.id} />
+        <PaymentRow
+          payment={payment}
+          key={payment.id}
+          isSelected={selectedPayments[payment.id]}
+          onSelect={() => onSelect(payment.id)}
+        />
       ))}
     </Box>
   );
@@ -50,6 +74,9 @@ const PaymentsTable = ({ pendingPayments, paidPayments }) => {
 PaymentsTable.propTypes = {
   paidPayments: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   pendingPayments: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  selectedPayments: PropTypes.shape().isRequired,
+  onSelect: PropTypes.func.isRequired,
+  onSelectedReset: PropTypes.func.isRequired,
 };
 
 export default PaymentsTable;

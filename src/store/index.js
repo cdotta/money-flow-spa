@@ -1,9 +1,11 @@
 import { combineReducers, createStore } from 'redux';
 
-function currentDate(state = new Date().toISOString()) {
-  return state;
-}
+import * as fromCurrentDate from './ducks/currentDate';
+import * as fromSelectedPayments from './ducks/selectedPayments';
 
-const reducers = combineReducers({ currentDate });
+const reducers = combineReducers({
+  currentDate: fromCurrentDate.reducer,
+  selectedPayments: fromSelectedPayments.reducer,
+});
 
 export default createStore(reducers);
