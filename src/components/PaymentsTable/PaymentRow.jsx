@@ -32,10 +32,10 @@ const PaymentRow = ({ payment, isSelected, onSelect }) => {
           {`$ ${amount}`}
         </Box>
         <Box width={100}>
-          <IconButton aria-label="delete">
+          <IconButton aria-label="delete" disabled>
             <DeleteIcon />
           </IconButton>
-          <IconButton aria-label="edit">
+          <IconButton aria-label="edit" disabled>
             <EditIcon />
           </IconButton>
         </Box>

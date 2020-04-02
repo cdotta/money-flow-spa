@@ -26,12 +26,14 @@ const PaymentsTable = ({
   selectedPayments,
   onSelect,
   onSelectedReset,
+  onUpdatePayments,
 }) => {
   const [activeTab, setActiveTab] = useState('pending');
   const isPendingSelected = activeTab === 'pending';
   const payments = isPendingSelected ? pendingPayments : paidPayments;
-  const arePaymentsSelected = Object.values(selectedPayments).some(Boolean);
-
+  const selectedPaymentIds = Object.keys(selectedPayments).filter(
+    id => selectedPayments[id],
+  );
   const handleTabChange = value => {
     onSelectedReset();
     setActiveTab(value);
@@ -53,7 +55,12 @@ const PaymentsTable = ({
         <Button
           variant="contained"
           color={isPendingSelected ? 'primary' : 'secondary'}
-          disabled={!arePaymentsSelected}
+          disabled={selectedPaymentIds.length === 0}
+          onClick={() => {
+            onUpdatePayments(selectedPaymentIds, {
+              pending: !isPendingSelected,
+            });
+          }}
         >
           {isPendingSelected ? 'Pay' : 'Stash'}
         </Button>
@@ -77,6 +84,7 @@ PaymentsTable.propTypes = {
   selectedPayments: PropTypes.shape().isRequired,
   onSelect: PropTypes.func.isRequired,
   onSelectedReset: PropTypes.func.isRequired,
+  onUpdatePayments: PropTypes.func.isRequired,
 };
 
 export default PaymentsTable;

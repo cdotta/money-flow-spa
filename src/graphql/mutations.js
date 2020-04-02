@@ -10,3 +10,12 @@ export const CREATE_PAYMENT = gql`
   }
   ${PAYMENT_FIELDS}
 `;
+
+export const UPDATE_PAYMENTS = gql`
+  mutation UpdatePayments($ids: [ID!]!, $data: PaymentUpdateInput!) {
+    updatePayments(ids: $ids, data: $data) {
+      ...PaymentFields
+    }
+  }
+  ${PAYMENT_FIELDS}
+`;

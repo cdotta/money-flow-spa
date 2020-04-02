@@ -1,10 +1,11 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { getMonth, getYear, parseISO } from 'date-fns';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PaymentsTable from '../components/PaymentsTable';
 import Spinner from '../components/Spinner';
+import { UPDATE_PAYMENTS } from '../graphql/mutations';
 import { PAYMENTS } from '../graphql/queries';
 import {
   RESET_SELECTION,
@@ -40,6 +41,7 @@ const PaymentsTableContainer = () => {
     pending: false,
   };
 
+  const [updatePayments] = useMutation(UPDATE_PAYMENTS);
   const { loading, data, error } = useQuery(PAYMENTS, {
     variables: {
       pendingFilter,
@@ -63,11 +65,21 @@ const PaymentsTableContainer = () => {
     dispatch({ type: RESET_SELECTION });
   };
 
+  const handleUpdatePayments = (ids, updateData) => {
+    updatePayments({
+      variables: { ids, data: updateData },
+      refetchQueries: [
+        { query: PAYMENTS, variables: { pendingFilter, paidFilter } },
+      ],
+    }).then(handleSelectedReset);
+  };
+
   return (
     <PaymentsTable
       selectedPayments={selectedPayments}
       onSelect={handleSelect}
       onSelectedReset={handleSelectedReset}
+      onUpdatePayments={handleUpdatePayments}
       paidPayments={enrichPayments({
         payments: data.paidPayments,
         currentMonth,
