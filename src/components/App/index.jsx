@@ -1,6 +1,6 @@
 import { ApolloProvider } from '@apollo/react-hooks';
 import DateFnsUtils from '@date-io/date-fns';
-import { CssBaseline } from '@material-ui/core';
+import { Box, CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
@@ -11,18 +11,22 @@ import createApolloClient from '../../graphql/createApolloClient';
 import PaymentsPage from '../../pages/PaymentsPage';
 import store from '../../store';
 import theme from '../../theme';
+import NavigationSidebar from '../NavigationSidebar';
 
 const client = createApolloClient();
 
 function Router() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path="/payments">
-          <PaymentsPage />
-        </Route>
-        <Route exact path="/" render={() => <Redirect to="/payments" />} />
-      </Switch>
+      <Box display="flex">
+        <NavigationSidebar />
+        <Switch>
+          <Route path="/payments">
+            <PaymentsPage />
+          </Route>
+          <Route exact path="/" render={() => <Redirect to="/payments" />} />
+        </Switch>
+      </Box>
     </BrowserRouter>
   );
 }

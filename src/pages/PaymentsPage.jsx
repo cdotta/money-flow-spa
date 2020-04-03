@@ -20,11 +20,7 @@ const PaymentsPage = () => {
 
   return (
     <Container>
-      <Drawer
-        anchor="right"
-        open={!!match}
-        onClose={() => history.push('/payments')}
-      >
+      <Drawer anchor="right" open={!!match} onClose={() => history.push('/payments')}>
         <PaymentForm />
       </Drawer>
       <PaymentsTable />
