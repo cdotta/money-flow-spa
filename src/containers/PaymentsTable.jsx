@@ -7,18 +7,7 @@ import PaymentsTable from '../components/PaymentsTable';
 import Spinner from '../components/Spinner';
 import { UPDATE_PAYMENTS } from '../graphql/mutations';
 import { PAYMENTS } from '../graphql/queries';
-import {
-  RESET_SELECTION,
-  TOGGLE_SELECTION,
-} from '../store/ducks/selectedPayments';
-
-function enrichPayments({ payments, currentYear, currentMonth }) {
-  return payments.map(payment => ({
-    ...payment,
-    isOverdue:
-      payment.dueMonth < currentMonth && payment.dueYear <= currentYear,
-  }));
-}
+import { RESET_SELECTION, TOGGLE_SELECTION } from '../store/ducks/selectedPayments';
 
 const PaymentsTableContainer = () => {
   const currentDate = parseISO(useSelector(state => state.currentDate));
@@ -27,25 +16,23 @@ const PaymentsTableContainer = () => {
   const currentMonth = getMonth(currentDate) + 1;
   const currentYear = getYear(currentDate);
 
-  const pendingFilter = {
-    toDueMonth: currentMonth,
-    toDueYear: currentYear,
-    pending: true,
-  };
-
-  const paidFilter = {
+  const paymentFilter = {
     fromDueMonth: currentMonth,
     fromDueYear: currentYear,
     toDueMonth: currentMonth,
     toDueYear: currentYear,
-    pending: false,
+  };
+
+  const virtualPaymentFilter = {
+    dueMonth: currentMonth,
+    dueYear: currentYear,
   };
 
   const [updatePayments] = useMutation(UPDATE_PAYMENTS);
   const { loading, data, error } = useQuery(PAYMENTS, {
     variables: {
-      pendingFilter,
-      paidFilter,
+      paymentFilter,
+      virtualPaymentFilter,
     },
   });
 
@@ -68,9 +55,7 @@ const PaymentsTableContainer = () => {
   const handleUpdatePayments = (ids, updateData) => {
     updatePayments({
       variables: { ids, data: updateData },
-      refetchQueries: [
-        { query: PAYMENTS, variables: { pendingFilter, paidFilter } },
-      ],
+      refetchQueries: [{ query: PAYMENTS, variables: { paymentFilter, virtualPaymentFilter } }],
     }).then(handleSelectedReset);
   };
 
@@ -80,16 +65,8 @@ const PaymentsTableContainer = () => {
       onSelect={handleSelect}
       onSelectedReset={handleSelectedReset}
       onUpdatePayments={handleUpdatePayments}
-      paidPayments={enrichPayments({
-        payments: data.paidPayments,
-        currentMonth,
-        currentYear,
-      })}
-      pendingPayments={enrichPayments({
-        payments: data.pendingPayments,
-        currentMonth,
-        currentYear,
-      })}
+      payments={data.payments}
+      virtualPayments={data.virtualPayments}
     />
   );
 };

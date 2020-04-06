@@ -4,15 +4,21 @@ import { PAYMENT_FIELDS } from './fragments';
 
 export const PAYMENTS = gql`
   query MonthlyPayments(
-    $paidFilter: PaymentFilterInput
-    $pendingFilter: PaymentFilterInput
+    $paymentFilter: PaymentFilterInput
+    $virtualPaymentFilter: VirtualPaymentFilterInput!
   ) {
-    paidPayments: payments(filter: $paidFilter) {
+    payments(filter: $paymentFilter) {
       ...PaymentFields
     }
 
-    pendingPayments: payments(filter: $pendingFilter) {
-      ...PaymentFields
+    virtualPayments(filter: $virtualPaymentFilter) {
+      id
+      description
+      amount
+      pending
+      recurringPaymentId
+      dueMonth
+      dueYear
     }
   }
   ${PAYMENT_FIELDS}

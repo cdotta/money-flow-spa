@@ -1,35 +1,24 @@
-import { Box, Divider, IconButton, makeStyles } from '@material-ui/core';
+import { Box, Divider, IconButton, Typography } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import LoopIcon from '@material-ui/icons/Loop';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const useStyles = makeStyles(theme => ({
-  overdue: {
-    color: theme.palette.error.dark,
-    fontWeight: theme.typography.fontWeightBold,
-  },
-}));
-
-const PaymentRow = ({ payment, isSelected, onSelect }) => {
-  const classes = useStyles();
-
-  const { isOverdue, description, amount } = payment;
+const PaymentRow = ({ payment, selected, onSelect, virtual }) => {
+  const { description, amount, recurringPaymentId } = payment;
 
   return (
     <Box>
       <Box display="flex">
-        <Checkbox color="primary" checked={isSelected} onChange={onSelect} />
-        <Box
-          flexGrow={1}
-          padding={2}
-          className={isOverdue ? classes.overdue : ''}
-        >
-          {description}
+        <Checkbox color="primary" checked={selected} onChange={onSelect} />
+        <Box flexGrow={1} padding={2} display="flex" justifyContent="space-between">
+          <Typography>{`${description} ${virtual ? '(virtual)' : ''}`}</Typography>
+          {recurringPaymentId && <LoopIcon />}
         </Box>
         <Box width={100} padding={2}>
-          {`$ ${amount}`}
+          <Typography>{`$ ${amount}`}</Typography>
         </Box>
         <Box width={100}>
           <IconButton aria-label="delete" disabled>
@@ -48,11 +37,13 @@ const PaymentRow = ({ payment, isSelected, onSelect }) => {
 PaymentRow.propTypes = {
   payment: PropTypes.shape().isRequired,
   onSelect: PropTypes.func.isRequired,
-  isSelected: PropTypes.bool,
+  selected: PropTypes.bool,
+  virtual: PropTypes.bool,
 };
 
 PaymentRow.defaultProps = {
-  isSelected: false,
+  selected: false,
+  virtual: false,
 };
 
 export default PaymentRow;

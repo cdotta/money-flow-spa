@@ -6,6 +6,7 @@ export const PAYMENT_FIELDS = gql`
     description
     amount
     pending
+    recurringPaymentId
     dueMonth
     dueYear
   }
