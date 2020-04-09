@@ -6,7 +6,7 @@ import PaymentRow from './PaymentRow';
 
 const Headers = () => {
   return (
-    <Typography>
+    <Typography component="div">
       <Box display="flex">
         <Box flexGrow={1} padding={1}>
           <strong>Description</strong>

@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 
-import { PAYMENT_FIELDS } from './fragments';
+import { PAYMENT_FIELDS, RECURRING_PAYMENT_FIELDS } from './fragments';
 
 export const CREATE_PAYMENT = gql`
   mutation CreatePayment($paymentInput: PaymentInput!) {
@@ -9,6 +9,15 @@ export const CREATE_PAYMENT = gql`
     }
   }
   ${PAYMENT_FIELDS}
+`;
+
+export const CREATE_RECURRING_PAYMENT = gql`
+  mutation CreateRecurringPayment($recurringPaymentInput: RecurringPaymentInput!) {
+    createRecurringPayment(recurringPayment: $recurringPaymentInput) {
+      ...RecurringPaymentFields
+    }
+  }
+  ${RECURRING_PAYMENT_FIELDS}
 `;
 
 export const UPDATE_PAYMENTS = gql`

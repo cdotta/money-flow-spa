@@ -38,9 +38,7 @@ const PaymentFormContainer = () => {
     };
     createPayment({
       variables: { paymentInput },
-      refetchQueries: [
-        { query: PAYMENTS, variables: { pendingFilter, paidFilter } },
-      ],
+      refetchQueries: [{ query: PAYMENTS, variables: { pendingFilter, paidFilter } }],
     }).then(() => history.push('/payments'));
   }
 

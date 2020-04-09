@@ -11,3 +11,11 @@ export const PAYMENT_FIELDS = gql`
     dueYear
   }
 `;
+
+export const RECURRING_PAYMENT_FIELDS = gql`
+  fragment RecurringPaymentFields on RecurringPayment {
+    id
+    description
+    defaultAmount
+  }
+`;

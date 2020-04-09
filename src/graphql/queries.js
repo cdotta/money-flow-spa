@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 
-import { PAYMENT_FIELDS } from './fragments';
+import { PAYMENT_FIELDS, RECURRING_PAYMENT_FIELDS } from './fragments';
 
 export const PAYMENTS = gql`
   query MonthlyPayments(
@@ -22,4 +22,13 @@ export const PAYMENTS = gql`
     }
   }
   ${PAYMENT_FIELDS}
+`;
+
+export const RECURRING_PAYMENTS = gql`
+  query RecurringPayments {
+    recurringPayments {
+      ...RecurringPaymentFields
+    }
+  }
+  ${RECURRING_PAYMENT_FIELDS}
 `;

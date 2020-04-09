@@ -4,20 +4,20 @@ import React, { memo } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import MainFab from '../components/MainFab';
-import PaymentForm from '../containers/PaymentForm';
-import PaymentsTable from '../containers/PaymentsTable';
+import RecurringPaymentForm from '../containers/RecurringPaymentForm';
+import RecurringPaymentsTable from '../containers/RecurringPaymentsTable';
 
 const PaymentsPage = () => {
   const history = useHistory();
-  const match = useRouteMatch('/payments/new');
+  const match = useRouteMatch('/recurring-payments/new');
 
   return (
     <Container>
-      <Drawer anchor="right" open={!!match} onClose={() => history.push('/payments')}>
-        <PaymentForm />
+      <Drawer anchor="right" open={!!match} onClose={() => history.push('/recurring-payments')}>
+        <RecurringPaymentForm />
       </Drawer>
-      <PaymentsTable />
-      <Link to="/payments/new">
+      <RecurringPaymentsTable />
+      <Link to="/recurring-payments/new">
         <MainFab color="primary" aria-label="add">
           <AddIcon />
         </MainFab>

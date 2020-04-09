@@ -34,6 +34,7 @@ const PaymentsTableContainer = () => {
       paymentFilter,
       virtualPaymentFilter,
     },
+    fetchPolicy: 'no-cache',
   });
 
   if (loading) {

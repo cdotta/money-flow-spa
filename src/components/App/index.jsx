@@ -9,6 +9,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import createApolloClient from '../../graphql/createApolloClient';
 import PaymentsPage from '../../pages/PaymentsPage';
+import RecurringPaymentsPage from '../../pages/RecurringPaymentsPage';
 import store from '../../store';
 import theme from '../../theme';
 import NavigationSidebar from '../NavigationSidebar';
@@ -23,6 +24,9 @@ function Router() {
         <Switch>
           <Route path="/payments">
             <PaymentsPage />
+          </Route>
+          <Route path="/recurring-payments">
+            <RecurringPaymentsPage />
           </Route>
           <Route exact path="/" render={() => <Redirect to="/payments" />} />
         </Switch>
