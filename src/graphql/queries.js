@@ -12,7 +12,6 @@ export const PAYMENTS = gql`
     }
 
     virtualPayments(filter: $virtualPaymentFilter) {
-      id
       description
       amount
       pending

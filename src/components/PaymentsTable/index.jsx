@@ -1,4 +1,4 @@
-import { Box, Button, Tab, Tabs, Typography } from '@material-ui/core';
+import { Box, Tab, Tabs, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
@@ -11,10 +11,7 @@ const Headers = () => {
         <Box flexGrow={1} padding={1}>
           <strong>Description</strong>
         </Box>
-        <Box width={100} padding={1}>
-          <strong>Amount</strong>
-        </Box>
-        <Box width={100} padding={1}>
+        <Box width={100} padding={1} textAlign="center">
           <strong>Actions</strong>
         </Box>
       </Box>
@@ -22,19 +19,10 @@ const Headers = () => {
   );
 };
 
-const PaymentsTable = ({
-  payments,
-  virtualPayments,
-  selectedPayments,
-  onSelect,
-  onSelectedReset,
-  onUpdatePayments,
-}) => {
+const PaymentsTable = ({ payments, virtualPayments, onUpdatePayment, onMaterializePayment }) => {
   const [activeTab, setActiveTab] = useState('pending');
   const isPendingSelected = activeTab === 'pending';
-  const selectedPaymentIds = Object.keys(selectedPayments).filter(id => selectedPayments[id]);
   const handleTabChange = value => {
-    onSelectedReset();
     setActiveTab(value);
   };
 
@@ -50,29 +38,14 @@ const PaymentsTable = ({
         <Tab value="pending" label="Pending" />
         <Tab value="paid" label="Paid" />
       </Tabs>
-      <Box display="flex" justifyContent="flex-end" marginTop={1}>
-        <Button
-          variant="contained"
-          color={isPendingSelected ? 'primary' : 'secondary'}
-          disabled={selectedPaymentIds.length === 0}
-          onClick={() => {
-            onUpdatePayments(selectedPaymentIds, {
-              pending: !isPendingSelected,
-            });
-          }}
-        >
-          {isPendingSelected ? 'Pay' : 'Stash'}
-        </Button>
-      </Box>
       <Headers />
       {isPendingSelected &&
         virtualPayments.map(virtualPayment => (
           <PaymentRow
             virtual
             payment={virtualPayment}
-            key={virtualPayment.id}
-            selected={selectedPayments[virtualPayment.id]}
-            onSelect={() => onSelect(virtualPayment.id)}
+            key={virtualPayment.recurringPaymentId}
+            onUpdate={data => onMaterializePayment({ virtualPayment, data })}
           />
         ))}
       {payments
@@ -81,8 +54,7 @@ const PaymentsTable = ({
           <PaymentRow
             payment={payment}
             key={payment.id}
-            selected={selectedPayments[payment.id]}
-            onSelect={() => onSelect(payment.id)}
+            onUpdate={data => onUpdatePayment({ payment, data })}
           />
         ))}
     </Box>
@@ -92,10 +64,8 @@ const PaymentsTable = ({
 PaymentsTable.propTypes = {
   payments: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   virtualPayments: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  selectedPayments: PropTypes.shape().isRequired,
-  onSelect: PropTypes.func.isRequired,
-  onSelectedReset: PropTypes.func.isRequired,
-  onUpdatePayments: PropTypes.func.isRequired,
+  onUpdatePayment: PropTypes.func.isRequired,
+  onMaterializePayment: PropTypes.func.isRequired,
 };
 
 export default PaymentsTable;

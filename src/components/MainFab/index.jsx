@@ -4,7 +4,7 @@ import { styled } from '@material-ui/core/styles';
 import theme from '../../theme';
 
 const MainFab = styled(Fab)({
-  position: 'absolute',
+  position: 'fixed',
   bottom: theme.spacing(2),
   right: theme.spacing(2),
 });

@@ -20,9 +20,18 @@ export const CREATE_RECURRING_PAYMENT = gql`
   ${RECURRING_PAYMENT_FIELDS}
 `;
 
-export const UPDATE_PAYMENTS = gql`
-  mutation UpdatePayments($ids: [ID!]!, $data: PaymentUpdateInput!) {
-    updatePayments(ids: $ids, data: $data) {
+export const UPDATE_PAYMENT = gql`
+  mutation UpdatePayment($id: ID!, $data: PaymentUpdateInput!) {
+    updatePayment(id: $id, data: $data) {
+      ...PaymentFields
+    }
+  }
+  ${PAYMENT_FIELDS}
+`;
+
+export const MATERIALIZE_PAYMENT = gql`
+  mutation MaterializePayment($recurringPaymentId: ID!, $data: MaterializePaymentInput!) {
+    materializePayment(recurringPaymentId: $recurringPaymentId, data: $data) {
       ...PaymentFields
     }
   }
